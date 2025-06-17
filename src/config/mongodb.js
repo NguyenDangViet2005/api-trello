@@ -29,3 +29,8 @@ export const GET_DB = () => {
   }
   return trelloDatabaseInstance
 }
+
+//đóng kết nối database khi cần
+export const CLOSE_DB = async () => {
+  await mongoClientInstance.close()
+}
