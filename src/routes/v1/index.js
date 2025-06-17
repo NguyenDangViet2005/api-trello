@@ -5,11 +5,11 @@
  */
 import express from 'express'
 const Router = express.Router()
-import { boardRouters } from './boardRoutes'
+import { boardRoute } from './boardRoute'
 
 Router.get('/status', (req, res) => {
   res.status(200).json({ message: 'APIs are ready to use!' })
 })
 // board API
-Router.use('/boards', boardRouters)
+Router.use('/boards', boardRoute)
 export const APIs_V1 = Router
