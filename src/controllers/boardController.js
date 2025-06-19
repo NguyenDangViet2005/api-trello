@@ -12,12 +12,17 @@ const createNew = async (req, res, next) => {
     //Điều hướng đến Service
     const createdBoard = await boardService.createNew(req.body)
     //Có kết quả thì trả về phía Client
-    res.status(StatusCodes.OK).json(createdBoard)
+    res.status(StatusCodes.CREATED).json(createdBoard)
   } catch (err) {
     next(err)
   }
 }
 
+const getDetails = async (req, res, next) => {
+  const boardDetails = await boardService.getDetails(req.params.id)
+  res.status(StatusCodes.OK).json(boardDetails)
+}
 export const boardController = {
-  createNew
+  createNew,
+  getDetails
 }

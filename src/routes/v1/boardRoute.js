@@ -14,4 +14,6 @@ Router.route('/')
   .get((req, res) => res.status(StatusCodes.OK).json({ message: 'API get list boards' }))
   //ban đầu sẽ chạy vào validation và khi gặp lệnh Next() thì nhảy qua controller
   .post(boardValidation.createNew, boardController.createNew)
+Router.route('/:id')
+  .get(boardController.getDetails)
 export const boardRoute = Router
