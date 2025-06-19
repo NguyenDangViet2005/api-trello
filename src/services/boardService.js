@@ -4,7 +4,9 @@
  * "A bit of fragrance clings to the hand that gives flowers!"
  */
 
+import { StatusCodes } from 'http-status-codes'
 import { boardModel } from '~/models/boardModel'
+import ApiError from '~/utils/ApiError'
 import { slugify } from '~/utils/formatters'
 
 /* eslint-disable no-useless-catch*/
@@ -24,6 +26,16 @@ const createNew = async (requestbody) => {
     throw error
   }
 }
+const getDetails = async (id) => {
+  try {
+    const boardDetails = await boardModel.getDetails(id)
+    if (!boardDetails) throw new ApiError(StatusCodes.NOT_FOUND, 'Board is not found')
+    return boardDetails
+  } catch (error) {
+    throw error
+  }
+}
 export const boardService = {
-  createNew
+  createNew,
+  getDetails
 }
