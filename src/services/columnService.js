@@ -3,6 +3,7 @@
  * YouTube: https://youtube.com/@trungquandev
  * "A bit of fragrance clings to the hand that gives flowers!"
  */
+import { boardModel } from '~/models/boardModel'
 import { columnModel } from '~/models/columnModel'
 
 const createNew = async (requestbody) => {
@@ -12,7 +13,12 @@ const createNew = async (requestbody) => {
       ...requestbody
     }
     const createdColumn = await columnModel.createNew(newColumn)
-    return await columnModel.findOneById(createdColumn.insertedId)
+    const getNewColumn = await columnModel.findOneById(createdColumn.insertedId)
+    if (getNewColumn) {
+      getNewColumn.cards = []
+      await boardModel.pushColumnOrderIds(getNewColumn)
+    }
+    return getNewColumn
   } catch (error) {
     throw error
   }

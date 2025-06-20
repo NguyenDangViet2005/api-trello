@@ -4,6 +4,7 @@
  * "A bit of fragrance clings to the hand that gives flowers!"
  */
 import { cardModel } from '~/models/cardModel'
+import { columnModel } from '~/models/columnModel'
 
 const createNew = async (requestbody) => {
 
@@ -12,7 +13,11 @@ const createNew = async (requestbody) => {
       ...requestbody
     }
     const createdCard = await cardModel.createNew(newCard)
-    return await cardModel.findOneById(createdCard.insertedId)
+    const getNewCard = await cardModel.findOneById(createdCard.insertedId)
+    if (getNewCard) {
+      await columnModel.pushCardOrderIds(getNewCard)
+    }
+    return getNewCard
   } catch (error) {
     throw error
   }
