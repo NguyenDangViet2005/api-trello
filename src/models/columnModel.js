@@ -55,7 +55,7 @@ const pushCardOrderIds = async (card) => {
       { $push: { cardOrderIds: new ObjectId(card._id) } },
       { returnDocument: 'after' }
     )
-    return res.value
+    return res
   } catch (error) {
     throw new Error(error)
   }
