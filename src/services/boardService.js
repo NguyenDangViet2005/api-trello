@@ -7,6 +7,7 @@
 import { StatusCodes } from 'http-status-codes'
 import { cloneDeep } from 'lodash'
 import { boardModel } from '~/models/boardModel'
+import { cardModel } from '~/models/cardModel'
 import ApiError from '~/utils/ApiError'
 import { slugify } from '~/utils/formatters'
 
@@ -56,8 +57,31 @@ const update = async (id, data) => {
     throw error
   }
 }
+const moveCardToDifferentColumn = async (data) => {
+  try {
+    // B1: Cập nhật mảng cardOrderIds của Column ban đầu chứa nó (Hiểu bản chất là xóa cái _id của Card ra khỏi mảng)
+    await boardModel.update(data.prevColumnId, {
+      cardOrderIds: data.prevCardOrderIds,
+      updatedAt: Date.now()
+    })
+    // B2: Cập nhật mảng cardOrderIds của Column tiếp theo (Hiểu bản chất là thêm _id của Card vào mảng)
+    await boardModel.update(data.nextColumnId, {
+      cardOrderIds: data.nextCardOrderIds,
+      updatedAt: Date.now()
+    })
+    // B3: Cập nhật lại trường columnId mới của cái Card đã kéo
+    await cardModel.update(data.currentCardId, {
+      columnId: data.nextColumnId,
+      updatedAt: Date.now()
+    })
+    return { updateRes: 'success' }
+  } catch (error) {
+    throw error
+  }
+}
 export const boardService = {
   createNew,
   getDetails,
-  update
+  update,
+  moveCardToDifferentColumn
 }

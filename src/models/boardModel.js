@@ -99,6 +99,27 @@ const update = async (id, data) => {
         delete data[fieldName]
       }
     })
+    //Đối với dữ liệu liên quan đến ObjectId, biến đổi ở đây
+    if (data.columnOrderIds) {
+      data.columnOrderIds = data.columnOrderIds.map(_id => (new ObjectId(_id)))
+    }
+    const res = await GET_DB().collection(BOARD_COLLECTION_NAME).findOneAndUpdate(
+      { _id: new ObjectId(id) },
+      { $set: data },
+      { returnDocument: 'after' }
+    )
+    return res
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+const moveCardToDifferentColumn = async (id, data) => {
+  try {
+    Object.keys(data).forEach(fieldName => {
+      if (INVALID_UPDATE_FIELDS.includes(fieldName)) {
+        delete data[fieldName]
+      }
+    })
     const res = await GET_DB().collection(BOARD_COLLECTION_NAME).findOneAndUpdate(
       { _id: new ObjectId(id) },
       { $set: data },
@@ -117,5 +138,6 @@ export const boardModel = {
   findOneById,
   getDetails,
   pushColumnOrderIds,
-  update
+  update,
+  moveCardToDifferentColumn
 }
