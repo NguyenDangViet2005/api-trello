@@ -5,7 +5,7 @@
  */
 //những domain được phép truy cập tới tài khoản của Server
 export const WHITELIST_DOMAINS = [
-  'http://localhost:5173'
+  // 'http://localhost:5173'
 ]
 
 export const BOARD_TYPE = {
