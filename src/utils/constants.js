@@ -6,7 +6,7 @@
 //những domain được phép truy cập tới tài khoản của Server
 export const WHITELIST_DOMAINS = [
   // 'http://localhost:5173'
-  'https://trello-mz9i8vcm3-nguyen-dang-viets-projects.vercel.app'
+  'trello-web-ivory.vercel.app'
 ]
 
 export const BOARD_TYPE = {
