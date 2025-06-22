@@ -20,9 +20,16 @@ const START_SERVER = () => {
   //Middleware xử lý lỗi tập trung
   app.use(errorHandlingMiddleware)
 
-  app.listen(env.APP_PORT, env.APP_HOST, () => {
-    console.log(`3. Hello ${env.AUTHOR}, server is running at http://${env.APP_HOST}:${env.APP_PORT}/`)
-  })
+  if (env.BUILD_MODE === 'production') {
+    app.listen(process.env.PORT, () => {
+      console.log(`3. Production: ${env.AUTHOR}, server is running at port:${process.env.PORT}`)
+    })
+  } else {
+    app.listen(env.LOCAL_DEV_APP_PORT, env.LOCAL_DEV_APP_HOST, () => {
+      console.log(`3. Local dev: ${env.AUTHOR}, server is running at host: ${env.LOCAL_DEV_APP_HOST} and port: ${env.LOCAL_DEV_APP_PORT}`)
+    })
+  }
+
   exitHook(() => {
     console.log('Disconnecting...')
     CLOSE_DB()
