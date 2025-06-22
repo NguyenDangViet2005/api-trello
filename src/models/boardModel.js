@@ -92,6 +92,19 @@ const pushColumnOrderIds = async (column) => {
     throw new Error(error)
   }
 }
+//Dùng $pull trong mongoDB ở TH này để lấy một phần tử ra khỏi mảng rồi xóa nó đi
+const pullColumnOrderIds = async (column) => {
+  try {
+    const res = await GET_DB().collection(BOARD_COLLECTION_NAME).findOneAndUpdate(
+      { _id: new ObjectId(column.boardId) },
+      { $pull: { columnOrderIds: new ObjectId(column._id) } },
+      { returnDocument: 'after' }
+    )
+    return res
+  } catch (error) {
+    throw new Error(error)
+  }
+}
 const update = async (id, data) => {
   try {
     Object.keys(data).forEach(fieldName => {
@@ -139,5 +152,6 @@ export const boardModel = {
   getDetails,
   pushColumnOrderIds,
   update,
-  moveCardToDifferentColumn
+  moveCardToDifferentColumn,
+  pullColumnOrderIds
 }
